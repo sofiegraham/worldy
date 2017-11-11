@@ -1,7 +1,6 @@
-var db = require('../database');
+const db = require('../database');
 
 const updateUser = (req, res, next) => {
-  console.log('BODY', req.body);
   const findOptions =  {
     name: req.body.name
   }
@@ -21,6 +20,19 @@ const updateUser = (req, res, next) => {
     }).then(userBoolArr => {
       let user = userBoolArr[0];
       let bool = userBoolArr[1];
+
+      if(true) {
+        db.Country.sync()
+        .then(()=> {
+          db.Country.findAll({})
+          .then(countries => {
+            console.log('COUNTRIES', countries);
+          });
+        })
+        //create association for user
+        //for each country in countries table
+          //create association in db
+      }
       
       let userObj = {
         id: user.dataValues.id,
@@ -28,12 +40,14 @@ const updateUser = (req, res, next) => {
         email: user.dataValues.email,
         score: user.dataValues.score
       }
-      
+
       res.userObj = userObj;
       console.log('user and bool', user.dataValues, bool);
       next();
     });
   });
+
+  const
     
     
     //.spread((user, wasCreated) => {  //This spreads the user and bool array into just the user and the boolean.
@@ -45,7 +59,28 @@ const updateUser = (req, res, next) => {
   // })
 }
 
+const getCountries = (req, res, next) => { 
+  /*
+  get 1 country where the user does not have the flag
+    //find all countries where user>flag is false;
+    //select one randomly
+
+  get 3 countries randomly
+    //select 3 random countries that do not include the one we already got
+
+
+  send all back
+
+
+  */
+}
+
 exports.updateUser = updateUser;
+exports.getCountries = getCountries;
+//exports.addCountries = addCountries;
+exports.writeCountryToDb = writeCountryToDb;
+
+
 
 
 

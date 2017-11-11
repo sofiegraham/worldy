@@ -18270,7 +18270,9 @@ var App = function (_Component) {
       isLoggedIn: false,
       currentUser: {
         name: 'sofie',
-        score: 100
+        score: 100,
+        email: 'f@f.ccom',
+        id: 1
       },
       userCountries: {
         zambia: {

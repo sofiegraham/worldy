@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser')
 const ctrl = require('../controller');
+const fs = require('fs');
+const request = require('request');
 
 const app = express();
 
@@ -12,9 +14,14 @@ app.use(express.static(__dirname + '/../client/public'));
 const PORT = process.env.PORT || 1234;
 
 app.post('/user', ctrl.updateUser, (req, res, next) => {
-  console.log('posted user');
+  console.log('posted user: ');
   res.end();
 })
+
+app.get('/game/flag', ctrl.getCountries, (req, res, next) => {
+
+
+});
 
 app.listen(PORT, function() {
   console.log(`listening on port ${PORT}`);

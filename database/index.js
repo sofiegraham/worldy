@@ -1,5 +1,6 @@
-var Sequelize = require('sequelize');
-var db = new Sequelize('worldly', 'root', '', {
+const Sequelize = require('sequelize');
+//const initDB = require('./populateDbScript.js'); //UNCOMMENT TO POPULATE
+const db = new Sequelize('worldly', 'root', '', {
   dialect: 'mysql'
 });
 
@@ -41,6 +42,10 @@ UserCountry.belongsTo(Country);
 User.sync();
 Country.sync();
 UserCountry.sync();
+
+//initDB.populateDatabase(); //UNCOMMENT TO POPULATE
+
+
 // creates these tables in MySQL if they don't already exist. Pass in {force: true}
 // to drop any existing user and message tables and make new ones.
 

@@ -19,6 +19,7 @@
     "babel-preset-stage-2": "^6.24.1",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
+    "fs": "0.0.1-security",
     "jquery": "^3.2.1",
     "mysql": "^2.15.0",
     "mysql2": "^1.4.2",
@@ -27,6 +28,7 @@
     "promise-polyfill": "6.0.2",
     "react": "^16.1.0",
     "react-dom": "^16.1.0",
+    "request": "^2.83.0",
     "sequelize": "^4.22.6",
     "webpack": "^3.8.1",
     "whatwg-fetch": "^2.0.3"

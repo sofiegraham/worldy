@@ -14,6 +14,8 @@ class App extends Component {
       currentUser: {
         name: 'sofie',
         score: 100,
+        email: 'f@f.ccom',
+        id: 1
       },
       userCountries: {
         zambia: {
