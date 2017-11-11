@@ -19,12 +19,16 @@
     "babel-preset-stage-2": "^6.24.1",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
+    "jquery": "^3.2.1",
     "mysql": "^2.15.0",
     "mysql2": "^1.4.2",
     "nodemon": "^1.12.1",
+    "popper.js": "^1.12.6",
+    "promise-polyfill": "6.0.2",
     "react": "^16.1.0",
     "react-dom": "^16.1.0",
     "sequelize": "^4.22.6",
-    "webpack": "^3.8.1"
+    "webpack": "^3.8.1",
+    "whatwg-fetch": "^2.0.3"
   }
 }

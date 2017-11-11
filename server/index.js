@@ -1,16 +1,21 @@
-var express = require('express');
-const app = express();
+const express = require('express');
 const bodyParser = require('body-parser')
-const db = require('../database');
+const ctrl = require('../controller');
 
+const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(__dirname + '/../client/public'));
 
-let port = process.env.PORT || 1234;
+const PORT = process.env.PORT || 1234;
 
-app.listen(port, function() {
-  console.log(`listening on port ${port}`);
+app.post('/user', ctrl.updateUser, (req, res, next) => {
+  console.log('posted user');
+  res.end();
+})
+
+app.listen(PORT, function() {
+  console.log(`listening on port ${PORT}`);
 });

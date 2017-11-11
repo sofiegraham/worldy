@@ -1,5 +1,5 @@
 var Sequelize = require('sequelize');
-var db = new Sequelize('flags', 'root', '', {
+var db = new Sequelize('worldly', 'root', '', {
   dialect: 'mysql'
 });
 
@@ -9,7 +9,6 @@ var User = db.define('User', {
   email: Sequelize.STRING,
   password: Sequelize.STRING,
   score: Sequelize.INTEGER,
-  
 });
 
 var Country = db.define('Country', {
@@ -21,6 +20,16 @@ var Country = db.define('Country', {
   flag: Sequelize.STRING,
 });
 
+var UserCountry = db.define('UserCountry', {
+  flag: Sequelize.BOOLEAN,
+});
+
+
+
+UserCountry.belongsTo(User);
+UserCountry.belongsTo(Country);
+
+
 // puts a UserId column on each Message instance
 // also gives us the `.setUser` method available
 // after creating a new instance of Message
@@ -31,6 +40,7 @@ var Country = db.define('Country', {
 
 User.sync();
 Country.sync();
+UserCountry.sync();
 // creates these tables in MySQL if they don't already exist. Pass in {force: true}
 // to drop any existing user and message tables and make new ones.
 
