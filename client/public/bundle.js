@@ -18270,7 +18270,7 @@ var App = function (_Component) {
       isLoggedIn: false,
       currentUser: {
         name: 'sofie',
-        id: 2
+        id: 1
       },
       currentScore: 0,
       gameData: {},
@@ -18296,7 +18296,7 @@ var App = function (_Component) {
         'div',
         null,
         _react2.default.createElement(_Nav2.default, { isLoggedIn: this.state.isLoggedIn }),
-        _react2.default.createElement(_UserProfile2.default, { currentUser: this.state.currentUser }),
+        _react2.default.createElement(_UserProfile2.default, { currentUser: this.state.currentUser, currentScore: this.state.currentScore }),
         _react2.default.createElement(_Game2.default, { gameGuess: this.gameGuess, gameData: this.state.gameData, gameIsPlaying: this.state.gameIsPlaying })
       );
     }
@@ -18325,21 +18325,17 @@ var _initialiseProps = function _initialiseProps() {
         body: JSON.stringify(newData)
       }).then(function (response) {
         return response.json();
-      }).then(function (data) {
+      }).then(function (score) {
+        console.log('DATA', score);
         app.setState({
-          currentScore: data.score
+          currentScore: score
         });
       });
-      //post score to db
-      //response is new score
-      //set new score to state.currentscore
     }
     app.setState({
       gameIsPlaying: false
     });
     app.fetchGameData();
-    //end the game
-    //start a new game
   };
 
   this.fetchGameData = function () {
@@ -18451,12 +18447,13 @@ var UserProfile = function UserProfile(props) {
       _react2.default.createElement(
         'h1',
         null,
-        props.currentUser.name
+        props.currentUser.name,
+        'TSET'
       ),
       _react2.default.createElement(
         'p',
         null,
-        props.currentUser.score
+        props.currentScore
       )
     )
   );

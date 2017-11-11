@@ -13,7 +13,7 @@ class App extends Component {
       isLoggedIn: false,
       currentUser: {
         name: 'sofie',
-        id: 2
+        id: 1
       },
       currentScore: 0,
       gameData: {},
@@ -49,21 +49,17 @@ class App extends Component {
         body: JSON.stringify(newData)
       }).then(response => {
         return response.json();
-      }).then(function(data) {
+      }).then(function(score) {
+        console.log('DATA', score);
         app.setState({
-          currentScore: data.score
+          currentScore: score
         })
       });
-      //post score to db
-      //response is new score
-      //set new score to state.currentscore
     }
     app.setState({
       gameIsPlaying: false,
     })
     app.fetchGameData();
-    //end the game
-    //start a new game
   }
 
   fetchGameData = () => {
@@ -101,7 +97,7 @@ class App extends Component {
     return (
       <div>
         <Nav isLoggedIn={this.state.isLoggedIn}/>
-        <UserProfile currentUser={this.state.currentUser}/>
+        <UserProfile currentUser={this.state.currentUser} currentScore={this.state.currentScore}/>
         <Game gameGuess={this.gameGuess} gameData={this.state.gameData} gameIsPlaying={this.state.gameIsPlaying}/>
       </div>
     );

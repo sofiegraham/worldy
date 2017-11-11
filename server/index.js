@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 1234;
 
 app.post('/user', ctrl.updateUser);
 
-app.post('/score', ctrl.updateScore);
+app.post('/score', ctrl.updateUserCountryScore, ctrl.getRecaluculatedUserScore);
 
 app.get('/game/flag', ctrl.getCountries);
 

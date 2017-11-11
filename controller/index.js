@@ -84,27 +84,88 @@ const getCountries = (req, res, next) => {
   })
 }
 
-const updateScore = (req, res, end) => {
+const updateUserCountryScore = (req, res, next) => {
 
   const columnName = req.body.columnName;
+  const userId = req.body.userId;
+  req.userId = userId;
 
   db.UserCountry.find({ 
     where: { 
-      UserId: req.body.userId,
+      UserId: userId,
       CountryId: req.body.countryId
     }
   })
   .then(userCountry => {
-    console.log('FOUND IT', userCountry.dataValues);
-    if (userCountry) {
-      userCountry.updateAttributes({
-        [columnName]: req.body.newValue
-      })
+    if(!userCountry) {
+      throw 'ERROR: UserCountry not found';
+    } else {
+      userCountry.updateAttributes({[columnName]: req.body.newValue});
+      console.log('USERCOUT', userCountry.dataValues); //why does this work if the above returns a promise??
+      const newScore = userCountry.dataValues.flag +
+        userCountry.dataValues.capital +
+        userCountry.dataValues.currency +
+        userCountry.dataValues.population;
+      
+      return userCountry.updateAttributes({ score: newScore }); //returns a promise!
     }
-  });
-
+  }).then(()=> {
+    next();
+  }).catch(err => {
+    console.log(err);
+  })
 }
+
+const getRecaluculatedUserScore = (req, res, next) => {
+  db.UserCountry.findAll({
+    where: { UserId: req.userId }
+  })
+  .then(countriesArr => {
+    req.userScore = 0;
+    countriesArr.forEach(country => {
+      req.userScore += country.dataValues.score;
+    });
+    console.log('USER SCORE', req.userScore);
+    return db.User.find({ 
+      where: { 
+        id: req.userId,
+      }
+    });
+  }).then((user) => {
+    if(!user) {
+      throw 'ERROR: user not found';
+    } else {
+      return user.updateAttributes({score: req.userScore});
+    }
+  }).then(() => {
+    res.write(JSON.stringify(req.userScore));
+    res.end();
+  })
+} 
+
+/*
+
+//update the value of the country rowCol in the db
+//update the score of the country row in db
+// recalc score
+
+calc ecah country score
+calc score and return it
+  find all UserCountry where id is userId
+  
+  
+  add score together
+
+  set user score as the result
+
+  
+
+
+
+
+*/
 
 exports.updateUser = updateUser;
 exports.getCountries = getCountries;
-exports.updateScore = updateScore;
+exports.updateUserCountryScore = updateUserCountryScore;
+exports.getRecaluculatedUserScore = getRecaluculatedUserScore;

@@ -25,7 +25,8 @@ var UserCountry = db.define('UserCountry', {
   capital: { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false },
   currency: { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false },
   population: { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false },
-  language: { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false }
+  language: { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false },
+  score: { type: Sequelize.INTEGER, allowNull: false, defaultValue: 0 }
 });
 
 UserCountry.belongsTo(User);
