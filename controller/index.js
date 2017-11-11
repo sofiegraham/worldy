@@ -1,4 +1,6 @@
 const db = require('../database');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 const updateUser = (req, res, next) => {
   const findOptions =  {
@@ -12,58 +14,50 @@ const updateUser = (req, res, next) => {
     score: 0,
   }
 
-  db.User.sync()
-  .then(() => {
-    db.User.findOrCreate({
-      where: findOptions,
-      defaults: createOptions
-    })
-    .then(userBoolArr => {
-      let user = userBoolArr[0];
-      let bool = userBoolArr[1];
+  db.User.findOrCreate({
+    where: findOptions,
+    defaults: createOptions
+  })
+  .then(userBoolArr => {
+    let user = userBoolArr[0];
+    let bool = userBoolArr[1];
 
-      //get userID
+    //get userID
 
-      if(bool) {
-        db.Country.sync()
-        .then(()=> {
-          db.Country.findAll({})
-          .then(countries => {
-            countries.forEach(country => {
-              const findOptions =  {
-                UserId: user.dataValues.id,
-                CountryId: country.dataValues.id,
-              }
-            
-              const createOptions = {
-                UserId: user.dataValues.id,
-                CountryId: country.dataValues.id,
-              }
+    if(bool) {
+      db.Country.findAll({})
+      .then(countries => {
+        countries.forEach(country => {
+          const findOptions =  {
+            UserId: user.dataValues.id,
+            CountryId: country.dataValues.id,
+          }
+        
+          const createOptions = {
+            UserId: user.dataValues.id,
+            CountryId: country.dataValues.id,
+          }
 
-              db.UserCountry.sync()
-              .then(() => {
-                db.UserCountry.findOrCreate({
-                  where: findOptions,
-                  defaults: createOptions
-                })
-              })
-            })
-          });
+          db.UserCountry.findOrCreate({
+            where: findOptions,
+            defaults: createOptions
+          })
         })
-      }
-      
-      let userObj = {
-        id: user.dataValues.id,
-        name: user.dataValues.name,
-        email: user.dataValues.email,
-        score: user.dataValues.score
-      }
+      });
+    }
+    
+    let userObj = {
+      id: user.dataValues.id,
+      name: user.dataValues.name,
+      email: user.dataValues.email,
+      score: user.dataValues.score
+    }
 
-      res.userObj = userObj;
-      console.log('user and bool', user.dataValues, bool);
-      next();
-    });
+    res.userObj = userObj;
+    console.log('user and bool', user.dataValues, bool);
+    next();
   });
+  
     
     
     //.spread((user, wasCreated) => {  //This spreads the user and bool array into just the user and the boolean.
@@ -89,6 +83,30 @@ const getCountries = (req, res, next) => {
 
 
   */
+  db.UserCountry.findAll({
+    where: { UserId: 1, flag: false },
+    order: [ Sequelize.fn( 'RAND' )],
+    limit: 1,
+    include: [ 'Country' ]
+  })
+  .then(randomUserCountryArr => {
+    const randomCountry = randomUserCountryArr[0].Country;
+    db.Country.findAll({
+      where: { [Op.not]: [ { id: randomCountry.id }]},
+      order: [ Sequelize.fn( 'RAND' )],
+      limit: 3
+    })
+    .then(countriesArr => {
+      const countrySelection = countriesArr.map(country => {
+        return country.dataValues;
+      }).concat([randomCountry.dataValues]);
+      res.country = {
+        userCountry: randomUserCountryArr[0].dataValues,
+        countries: countrySelection
+      }
+      console.log('COUNTRIES: ', res.country);
+    })
+  })
 }
 
 exports.updateUser = updateUser;

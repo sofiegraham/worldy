@@ -18286,7 +18286,7 @@ var App = function (_Component) {
       // const email = prompt("Please enter your email");
       // const password = prompt("Please enter your password");
     };var newUser = {
-      name: 'sofie',
+      name: 'cakes',
       email: 'sofie@sofie.com',
       password: 'password'
     };

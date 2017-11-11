@@ -19,6 +19,7 @@ app.post('/user', ctrl.updateUser, (req, res, next) => {
 })
 
 app.get('/game/flag', ctrl.getCountries, (req, res, next) => {
+  res.end();
 
 
 });
