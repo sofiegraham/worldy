@@ -18,11 +18,7 @@ app.post('/user', ctrl.updateUser, (req, res, next) => {
   res.end();
 })
 
-app.get('/game/flag', ctrl.getCountries, (req, res, next) => {
-  res.end();
-
-
-});
+app.get('/game/flag', ctrl.getCountries);
 
 app.listen(PORT, function() {
   console.log(`listening on port ${PORT}`);

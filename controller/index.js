@@ -70,19 +70,6 @@ const updateUser = (req, res, next) => {
 }
 
 const getCountries = (req, res, next) => { 
-  /*
-  get 1 country where the user does not have the flag
-    //find all countries where user>flag is false;
-    //select one randomly
-
-  get 3 countries randomly
-    //select 3 random countries that do not include the one we already got
-
-
-  send all back
-
-
-  */
   db.UserCountry.findAll({
     where: { UserId: 1, flag: false },
     order: [ Sequelize.fn( 'RAND' )],
@@ -100,11 +87,12 @@ const getCountries = (req, res, next) => {
       const countrySelection = countriesArr.map(country => {
         return country.dataValues;
       }).concat([randomCountry.dataValues]);
-      res.country = {
+      countryData = {
         userCountry: randomUserCountryArr[0].dataValues,
         countries: countrySelection
       }
-      console.log('COUNTRIES: ', res.country);
+      res.write(JSON.stringify(countryData));
+      res.end();
     })
   })
 }
