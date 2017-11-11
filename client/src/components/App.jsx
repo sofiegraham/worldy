@@ -17,10 +17,8 @@ class App extends Component {
         email: 'f@f.ccom',
         id: 2
       },
-      gameData: {
-        target: {},
-        countries: []
-      }
+      gameData: {},
+      gameIsPlaying: false
     }
     // const name = prompt("Please enter your name");
     // const email = prompt("Please enter your email");
@@ -36,6 +34,7 @@ class App extends Component {
   }
 
   fetchGameData = () => {
+    const app = this;
     fetch(`/game/flag?userid=${this.state.currentUser.id}`, {
       method: 'GET',
       headers: {
@@ -45,8 +44,10 @@ class App extends Component {
     .then(function(response) {
       return response.json();
     }).then(function(data) {
-      // `data` is the parsed version of the JSON returned from the above endpoint.
-      console.log(data);  // { "userId": 1, "id": 1, "title": "...", "body": "..." }
+      app.setState({
+        gameData: data,
+        gameIsPlaying: true
+      })
     });
   }
 
@@ -68,7 +69,7 @@ class App extends Component {
       <div>
         <Nav isLoggedIn={this.state.isLoggedIn}/>
         <UserProfile currentUser={this.state.currentUser}/>
-        <Game />
+        <Game gameData={this.state.gameData} gameIsPlaying={this.state.gameIsPlaying}/>
       </div>
     );
   }

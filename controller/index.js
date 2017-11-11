@@ -1,5 +1,6 @@
 const db = require('../database');
 const Sequelize = require('sequelize');
+const _ = require('underscore');
 const Op = Sequelize.Op;
 
 const updateUser = (req, res, next) => {
@@ -77,8 +78,8 @@ const getCountries = (req, res, next) => {
         return country.dataValues;
       }).concat([randomCountry.dataValues]);
       countryData = {
-        userCountry: randomUserCountryArr[0].dataValues,
-        countries: countrySelection
+        targetCountry: randomUserCountryArr[0].dataValues,
+        countries: _.shuffle(countrySelection)
       }
       console.log('COUNT', countryData);
       res.write(JSON.stringify(countryData));

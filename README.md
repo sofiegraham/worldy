@@ -4,11 +4,10 @@
   > A game about the world.
 
 ## Sub-Heading ##
-  > A gamified culture profile which allows people to earn points by learning about the world.
+  > A game which allows people to earn points by learning about the world.
 
 ## Summary ##
-  > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
-
+  > Score points by becomming more worldly.
 
 ## Problem ##
   > Many people lack knowledge about the world outside of their own country.

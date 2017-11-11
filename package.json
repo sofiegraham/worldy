@@ -30,6 +30,7 @@
     "react-dom": "^16.1.0",
     "request": "^2.83.0",
     "sequelize": "^4.22.6",
+    "underscore": "^1.8.3",
     "webpack": "^3.8.1",
     "whatwg-fetch": "^2.0.3"
   }

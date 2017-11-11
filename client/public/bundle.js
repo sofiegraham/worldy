@@ -18274,10 +18274,8 @@ var App = function (_Component) {
         email: 'f@f.ccom',
         id: 2
       },
-      gameData: {
-        target: {},
-        countries: []
-      }
+      gameData: {},
+      gameIsPlaying: false
       // const name = prompt("Please enter your name");
       // const email = prompt("Please enter your email");
       // const password = prompt("Please enter your password");
@@ -18300,7 +18298,7 @@ var App = function (_Component) {
         null,
         _react2.default.createElement(_Nav2.default, { isLoggedIn: this.state.isLoggedIn }),
         _react2.default.createElement(_UserProfile2.default, { currentUser: this.state.currentUser }),
-        _react2.default.createElement(_Game2.default, null)
+        _react2.default.createElement(_Game2.default, { gameData: this.state.gameData, gameIsPlaying: this.state.gameIsPlaying })
       );
     }
   }]);
@@ -18312,6 +18310,7 @@ var _initialiseProps = function _initialiseProps() {
   var _this2 = this;
 
   this.fetchGameData = function () {
+    var app = _this2;
     fetch('/game/flag?userid=' + _this2.state.currentUser.id, {
       method: 'GET',
       headers: {
@@ -18320,8 +18319,10 @@ var _initialiseProps = function _initialiseProps() {
     }).then(function (response) {
       return response.json();
     }).then(function (data) {
-      // `data` is the parsed version of the JSON returned from the above endpoint.
-      console.log(data); // { "userId": 1, "id": 1, "title": "...", "body": "..." }
+      app.setState({
+        gameData: data,
+        gameIsPlaying: true
+      });
     });
   };
 
@@ -18355,18 +18356,37 @@ var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _GameOption = __webpack_require__(36);
+
+var _GameOption2 = _interopRequireDefault(_GameOption);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Game = function Game(props) {
-  return _react2.default.createElement(
-    "div",
-    null,
-    _react2.default.createElement(
-      "div",
+  if (!props.gameIsPlaying) {
+    return _react2.default.createElement(
+      'div',
       null,
-      _react2.default.createElement("img", { src: "https://restcountries.eu/data/zmb.svg" })
-    )
-  );
+      _react2.default.createElement(
+        'p',
+        null,
+        'Please start a game'
+      )
+    );
+  } else {
+    return _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement('img', { src: props.gameData.targetCountry.Country.flag })
+      ),
+      props.gameData.countries.map(function (country) {
+        return _react2.default.createElement(_GameOption2.default, { country: country, key: country.id });
+      })
+    );
+  }
 };
 
 exports.default = Game;
@@ -19444,6 +19464,41 @@ var Nav = function Nav(props) {
 };
 
 exports.default = Nav;
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var GameOption = function GameOption(props) {
+  return _react2.default.createElement(
+    'div',
+    { className: 'row' },
+    _react2.default.createElement(
+      'div',
+      { className: 'col' },
+      _react2.default.createElement(
+        'p',
+        null,
+        props.country.name
+      )
+    )
+  );
+};
+
+exports.default = GameOption;
 
 /***/ })
 /******/ ]);
