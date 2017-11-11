@@ -1,4 +1,4 @@
-# Flag are cool! #
+# Flags are cool! #
  
 ## Heading ##
   > A game about the world.
