@@ -22,8 +22,6 @@ const updateUser = (req, res, next) => {
     let user = userBoolArr[0];
     let bool = userBoolArr[1];
 
-    //get userID
-
     if(bool) {
       db.Country.findAll({})
       .then(countries => {
@@ -57,21 +55,12 @@ const updateUser = (req, res, next) => {
     console.log('user and bool', user.dataValues, bool);
     next();
   });
-  
-    
-    
-    //.spread((user, wasCreated) => {  //This spreads the user and bool array into just the user and the boolean.
-  //     console.log(user.get({
-  //       plain: true
-  //     }))
-  //     console.log(wasCreated)
-  //   })
-  // })
 }
 
-const getCountries = (req, res, next) => { 
+const getCountries = (req, res, next) => {
+  console.log('GETTING COUNTRIES');
   db.UserCountry.findAll({
-    where: { UserId: 1, flag: false },
+    where: { UserId: req.query.userid, flag: false },
     order: [ Sequelize.fn( 'RAND' )],
     limit: 1,
     include: [ 'Country' ]
@@ -91,6 +80,7 @@ const getCountries = (req, res, next) => {
         userCountry: randomUserCountryArr[0].dataValues,
         countries: countrySelection
       }
+      console.log('COUNT', countryData);
       res.write(JSON.stringify(countryData));
       res.end();
     })
@@ -99,56 +89,3 @@ const getCountries = (req, res, next) => {
 
 exports.updateUser = updateUser;
 exports.getCountries = getCountries;
-//exports.addCountries = addCountries;
-
-
-
-
-
-// User.sync()
-// .then(function() {
-//   // Now instantiate an object and save it:
-//   return User.create({username: 'Jean Valjean'});
-// })
-
-// module.exports = {
-//   messages: {
-//     get: function (req, res) {
-//       db.Message.findAll({include: [db.User]})
-//         .then(function(messages) {
-//           res.json(messages);
-//         });
-//     },
-//     post: function (req, res) {
-//       db.User.findOrCreate({where: {username: req.body.username}})
-//         // findOrCreate returns multiple resutls in an array
-//         // use spread to assign the array to function arguments
-//         .spread(function(user, created) {
-//           db.Message.create({
-//             userid: user.get('id'),
-//             text: req.body.message,
-//             roomname: req.body.roomname
-//           }).then(function(message) {
-//             res.sendStatus(201);
-//           });
-//         });
-//     }
-//   },
-
-//   users: {
-//     get: function (req, res) {
-//       db.User.findAll()
-//         .then(function(users) {
-//           res.json(users);
-//         });
-//     },
-//     post: function (req, res) {
-//       db.User.findOrCreate({where: {username: req.body.username}})
-//         // findOrCreate returns multiple resutls in an array
-//         // use spread to assign the array to function arguments
-//         .spread(function(user, created) {
-//           res.sendStatus(created ? 201 : 200);
-//         });
-//     }
-//   }
-// };

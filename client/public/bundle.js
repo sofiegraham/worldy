@@ -18272,15 +18272,11 @@ var App = function (_Component) {
         name: 'sofie',
         score: 100,
         email: 'f@f.ccom',
-        id: 1
+        id: 2
       },
-      userCountries: {
-        zambia: {
-          flag: false
-        },
-        ireland: {
-          flag: true
-        }
+      gameData: {
+        target: {},
+        countries: []
       }
       // const name = prompt("Please enter your name");
       // const email = prompt("Please enter your email");
@@ -18292,6 +18288,7 @@ var App = function (_Component) {
     };
 
     _this.setUser(newUser);
+    _this.fetchGameData();
     return _this;
   }
 
@@ -18312,6 +18309,22 @@ var App = function (_Component) {
 }(_react.Component);
 
 var _initialiseProps = function _initialiseProps() {
+  var _this2 = this;
+
+  this.fetchGameData = function () {
+    fetch('/game/flag?userid=' + _this2.state.currentUser.id, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function (response) {
+      return response.json();
+    }).then(function (data) {
+      // `data` is the parsed version of the JSON returned from the above endpoint.
+      console.log(data); // { "userId": 1, "id": 1, "title": "...", "body": "..." }
+    });
+  };
+
   this.setUser = function (newUser) {
     fetch('/user', {
       method: 'POST',

@@ -21,6 +21,7 @@ const Game = (props) => {
 
         one correct country data (a country that the user does not yet have)
         3 incorrect country data
+        callback to update db and
         callback to setState of user score
 
 

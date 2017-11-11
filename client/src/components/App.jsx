@@ -15,15 +15,11 @@ class App extends Component {
         name: 'sofie',
         score: 100,
         email: 'f@f.ccom',
-        id: 1
+        id: 2
       },
-      userCountries: {
-        zambia: {
-          flag: false,
-        },
-        ireland: {
-          flag: true,
-        }
+      gameData: {
+        target: {},
+        countries: []
       }
     }
     // const name = prompt("Please enter your name");
@@ -36,6 +32,22 @@ class App extends Component {
     }
     
     this.setUser(newUser);
+    this.fetchGameData();
+  }
+
+  fetchGameData = () => {
+    fetch(`/game/flag?userid=${this.state.currentUser.id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(function(response) {
+      return response.json();
+    }).then(function(data) {
+      // `data` is the parsed version of the JSON returned from the above endpoint.
+      console.log(data);  // { "userId": 1, "id": 1, "title": "...", "body": "..." }
+    });
   }
 
   setUser = (newUser) => {
