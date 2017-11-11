@@ -18268,6 +18268,13 @@ var App = function (_Component) {
 
     _this.state = {
       isLoggedIn: false,
+      user: {
+        id: 0,
+        name: '',
+        email: '',
+        score: 0,
+        countries: []
+      },
       currentUser: {
         name: 'sofie',
         id: 1
@@ -18284,6 +18291,9 @@ var App = function (_Component) {
       password: 'password'
     };
 
+    var username = prompt("What is your username?");
+
+    _this.getUser('cakes');
     _this.setUser(newUser);
     _this.fetchGameData();
     return _this;
@@ -18296,7 +18306,7 @@ var App = function (_Component) {
         'div',
         null,
         _react2.default.createElement(_Nav2.default, { isLoggedIn: this.state.isLoggedIn }),
-        _react2.default.createElement(_UserProfile2.default, { currentUser: this.state.currentUser, currentScore: this.state.currentScore }),
+        _react2.default.createElement(_UserProfile2.default, { user: this.state.user }),
         _react2.default.createElement(_Game2.default, { gameGuess: this.gameGuess, gameData: this.state.gameData, gameIsPlaying: this.state.gameIsPlaying })
       );
     }
@@ -18352,6 +18362,30 @@ var _initialiseProps = function _initialiseProps() {
         gameData: data,
         gameIsPlaying: true
       });
+    });
+  };
+
+  this.getUser = function (username) {
+    var app = _this2;
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username: username })
+    }).then(function (response) {
+      if (!response.ok) {
+        throw Error(response.statusText);
+      } else {
+        return response.json();
+      }
+    }).then(function (userObj) {
+      app.setState({
+        user: userObj
+      });
+      console.log('JSON', userObj);
+    }).catch(function (error) {
+      console.log(error);
     });
   };
 
@@ -18447,13 +18481,12 @@ var UserProfile = function UserProfile(props) {
       _react2.default.createElement(
         'h1',
         null,
-        props.currentUser.name,
-        'TSET'
+        props.user.name
       ),
       _react2.default.createElement(
         'p',
         null,
-        props.currentScore
+        props.user.score
       )
     )
   );

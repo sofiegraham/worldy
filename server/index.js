@@ -13,7 +13,19 @@ app.use(express.static(__dirname + '/../client/public'));
 
 const PORT = process.env.PORT || 1234;
 
-app.post('/user', ctrl.updateUser);
+app.post('/user', ctrl.addUserIfNotExisting);
+
+app.post('/login', ctrl.getUserData, ctrl.getUserCountryData, (req, res, next) => {
+  const userObj = {
+    id: req.userData.id,
+    name: req.userData.name,
+    email: req.userData.email,
+    score: req.userData.score,
+    countries: req.userCountryData
+  }
+  res.write(JSON.stringify(userObj));
+  res.end();
+});
 
 app.post('/score', ctrl.updateUserCountryScore, ctrl.getRecaluculatedUserScore);
 

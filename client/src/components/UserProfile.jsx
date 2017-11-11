@@ -4,8 +4,8 @@ const UserProfile = (props) => {
   return (
     <div>
       <div>
-        <h1>{props.currentUser.name}TSET</h1>
-        <p>{props.currentScore}</p>
+        <h1>{props.user.name}</h1>
+        <p>{props.user.score}</p>
       </div>
       
     </div>

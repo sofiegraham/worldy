@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const _ = require('underscore');
 const Op = Sequelize.Op;
 
-const updateUser = (req, res, next) => {
+const addUserIfNotExisting = (req, res, next) => {
   const findOptions =  {
     name: req.body.name
   }
@@ -54,6 +54,48 @@ const updateUser = (req, res, next) => {
     res.write(JSON.stringify(userObj));
     res.end();
   });
+}
+
+const getUserData = (req, res, next) => {
+  db.User.find({ 
+    where: { 
+      name: req.body.username,
+    }
+  })
+  .then(user => {
+    if(!user) {
+      throw 'ERROR: UserCountry not found';
+    } else {
+      console.log('SUCCESS for', req.body.username);
+      req.userData = user.dataValues;
+      next();
+    }
+  }).catch(error => {
+    res.status(404);
+    res.end()
+  })
+}
+
+const getUserCountryData = (req, res, next) => {
+  console.log('CO', req.userData );
+  db.UserCountry.findAll({
+    where: { UserId: req.userData.id},
+  })
+  .then(userCountryArr => {
+    if(userCountryArr.length) {
+      req.userCountryData = userCountryArr.map(country => {
+        return country.dataValues;
+      });
+      next();
+    } else {
+      throw Error('Could not find UserCountries')
+    }
+  })
+  .catch(error => {
+    console.log(error);
+    res.status(500);
+    res.end();
+  })
 }
 
 const getCountries = (req, res, next) => {
@@ -125,7 +167,6 @@ const getRecaluculatedUserScore = (req, res, next) => {
     countriesArr.forEach(country => {
       req.userScore += country.dataValues.score;
     });
-    console.log('USER SCORE', req.userScore);
     return db.User.find({ 
       where: { 
         id: req.userId,
@@ -141,31 +182,11 @@ const getRecaluculatedUserScore = (req, res, next) => {
     res.write(JSON.stringify(req.userScore));
     res.end();
   })
-} 
+}
 
-/*
-
-//update the value of the country rowCol in the db
-//update the score of the country row in db
-// recalc score
-
-calc ecah country score
-calc score and return it
-  find all UserCountry where id is userId
-  
-  
-  add score together
-
-  set user score as the result
-
-  
-
-
-
-
-*/
-
-exports.updateUser = updateUser;
+exports.addUserIfNotExisting = addUserIfNotExisting;
 exports.getCountries = getCountries;
+exports.getUserCountryData = getUserCountryData;
 exports.updateUserCountryScore = updateUserCountryScore;
 exports.getRecaluculatedUserScore = getRecaluculatedUserScore;
+exports.getUserData = getUserData;
