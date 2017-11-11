@@ -17,31 +17,29 @@ const updateUser = (req, res, next) => {
     db.User.findOrCreate({
       where: findOptions,
       defaults: createOptions
-    }).then(userBoolArr => {
+    })
+    .then(userBoolArr => {
       let user = userBoolArr[0];
       let bool = userBoolArr[1];
 
       //get userID
 
-      if(true) {
+      if(bool) {
         db.Country.sync()
         .then(()=> {
           db.Country.findAll({})
           .then(countries => {
             countries.forEach(country => {
-              
               const findOptions =  {
                 UserId: user.dataValues.id,
                 CountryId: country.dataValues.id,
               }
-
-              console.log('COUNTRYID', country.dataValues.id);
             
               const createOptions = {
                 UserId: user.dataValues.id,
                 CountryId: country.dataValues.id,
-                flag: false
               }
+
               db.UserCountry.sync()
               .then(() => {
                 db.UserCountry.findOrCreate({
@@ -52,9 +50,6 @@ const updateUser = (req, res, next) => {
             })
           });
         })
-        //create association for user
-        //for each country in countries table
-          //create association in db
       }
       
       let userObj = {
