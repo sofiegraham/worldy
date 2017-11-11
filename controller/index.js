@@ -31,13 +31,15 @@ const updateUser = (req, res, next) => {
             countries.forEach(country => {
               
               const findOptions =  {
-                userId: user.dataValues.id,
-                countryId: country.dataValues.id,
+                UserId: user.dataValues.id,
+                CountryId: country.dataValues.id,
               }
+
+              console.log('COUNTRYID', country.dataValues.id);
             
               const createOptions = {
-                userId: user.dataValues.id,
-                countryId: country.dataValues.id,
+                UserId: user.dataValues.id,
+                CountryId: country.dataValues.id,
                 flag: false
               }
               db.UserCountry.sync()
@@ -48,7 +50,6 @@ const updateUser = (req, res, next) => {
                 })
               })
             })
-            console.log('COUNTRIES', countries[0]);
           });
         })
         //create association for user
