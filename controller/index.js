@@ -21,12 +21,34 @@ const updateUser = (req, res, next) => {
       let user = userBoolArr[0];
       let bool = userBoolArr[1];
 
+      //get userID
+
       if(true) {
         db.Country.sync()
         .then(()=> {
           db.Country.findAll({})
           .then(countries => {
-            console.log('COUNTRIES', countries);
+            countries.forEach(country => {
+              
+              const findOptions =  {
+                userId: user.dataValues.id,
+                countryId: country.dataValues.id,
+              }
+            
+              const createOptions = {
+                userId: user.dataValues.id,
+                countryId: country.dataValues.id,
+                flag: false
+              }
+              db.UserCountry.sync()
+              .then(() => {
+                db.UserCountry.findOrCreate({
+                  where: findOptions,
+                  defaults: createOptions
+                })
+              })
+            })
+            console.log('COUNTRIES', countries[0]);
           });
         })
         //create association for user
@@ -46,8 +68,6 @@ const updateUser = (req, res, next) => {
       next();
     });
   });
-
-  const
     
     
     //.spread((user, wasCreated) => {  //This spreads the user and bool array into just the user and the boolean.
@@ -78,8 +98,6 @@ const getCountries = (req, res, next) => {
 exports.updateUser = updateUser;
 exports.getCountries = getCountries;
 //exports.addCountries = addCountries;
-exports.writeCountryToDb = writeCountryToDb;
-
 
 
 

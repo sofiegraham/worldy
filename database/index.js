@@ -25,11 +25,8 @@ var UserCountry = db.define('UserCountry', {
   flag: Sequelize.BOOLEAN,
 });
 
-
-
 UserCountry.belongsTo(User);
 UserCountry.belongsTo(Country);
-
 
 // puts a UserId column on each Message instance
 // also gives us the `.setUser` method available
@@ -51,6 +48,7 @@ UserCountry.sync();
 
 exports.User = User;
 exports.Country = Country;
+exports.UserCountry = UserCountry;
 
 
 
