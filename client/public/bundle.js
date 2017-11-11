@@ -18270,10 +18270,9 @@ var App = function (_Component) {
       isLoggedIn: false,
       currentUser: {
         name: 'sofie',
-        score: 100,
-        email: 'f@f.ccom',
         id: 2
       },
+      currentScore: 0,
       gameData: {},
       gameIsPlaying: false
       // const name = prompt("Please enter your name");
@@ -18298,7 +18297,7 @@ var App = function (_Component) {
         null,
         _react2.default.createElement(_Nav2.default, { isLoggedIn: this.state.isLoggedIn }),
         _react2.default.createElement(_UserProfile2.default, { currentUser: this.state.currentUser }),
-        _react2.default.createElement(_Game2.default, { gameData: this.state.gameData, gameIsPlaying: this.state.gameIsPlaying })
+        _react2.default.createElement(_Game2.default, { gameGuess: this.gameGuess, gameData: this.state.gameData, gameIsPlaying: this.state.gameIsPlaying })
       );
     }
   }]);
@@ -18308,6 +18307,40 @@ var App = function (_Component) {
 
 var _initialiseProps = function _initialiseProps() {
   var _this2 = this;
+
+  this.gameGuess = function (country) {
+    var app = _this2;
+    var newData = {
+      userId: _this2.state.currentUser.id,
+      countryId: country.id,
+      columnName: 'flag',
+      newValue: true
+    };
+    if (country.id === _this2.state.gameData.targetCountry.CountryId) {
+      fetch('/score', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newData)
+      }).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        app.setState({
+          currentScore: data.score
+        });
+      });
+      //post score to db
+      //response is new score
+      //set new score to state.currentscore
+    }
+    app.setState({
+      gameIsPlaying: false
+    });
+    app.fetchGameData();
+    //end the game
+    //start a new game
+  };
 
   this.fetchGameData = function () {
     var app = _this2;
@@ -18383,7 +18416,7 @@ var Game = function Game(props) {
         _react2.default.createElement('img', { src: props.gameData.targetCountry.Country.flag })
       ),
       props.gameData.countries.map(function (country) {
-        return _react2.default.createElement(_GameOption2.default, { country: country, key: country.id });
+        return _react2.default.createElement(_GameOption2.default, { gameGuess: props.gameGuess, country: country, key: country.id });
       })
     );
   }
@@ -19488,7 +19521,9 @@ var GameOption = function GameOption(props) {
     { className: 'row' },
     _react2.default.createElement(
       'div',
-      { className: 'col' },
+      { className: 'col', onClick: function onClick(e) {
+          return props.gameGuess(props.country);
+        } },
       _react2.default.createElement(
         'p',
         null,

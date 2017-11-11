@@ -13,10 +13,9 @@ class App extends Component {
       isLoggedIn: false,
       currentUser: {
         name: 'sofie',
-        score: 100,
-        email: 'f@f.ccom',
         id: 2
       },
+      currentScore: 0,
       gameData: {},
       gameIsPlaying: false
     }
@@ -31,6 +30,40 @@ class App extends Component {
     
     this.setUser(newUser);
     this.fetchGameData();
+  }
+
+  gameGuess = (country) => {
+    const app = this;
+    const newData = {
+      userId: this.state.currentUser.id,
+      countryId: country.id,
+      columnName: 'flag',
+      newValue: true
+    }
+    if(country.id === this.state.gameData.targetCountry.CountryId) {
+      fetch('/score', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newData)
+      }).then(response => {
+        return response.json();
+      }).then(function(data) {
+        app.setState({
+          currentScore: data.score
+        })
+      });
+      //post score to db
+      //response is new score
+      //set new score to state.currentscore
+    }
+    app.setState({
+      gameIsPlaying: false,
+    })
+    app.fetchGameData();
+    //end the game
+    //start a new game
   }
 
   fetchGameData = () => {
@@ -69,7 +102,7 @@ class App extends Component {
       <div>
         <Nav isLoggedIn={this.state.isLoggedIn}/>
         <UserProfile currentUser={this.state.currentUser}/>
-        <Game gameData={this.state.gameData} gameIsPlaying={this.state.gameIsPlaying}/>
+        <Game gameGuess={this.gameGuess} gameData={this.state.gameData} gameIsPlaying={this.state.gameIsPlaying}/>
       </div>
     );
   }

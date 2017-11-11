@@ -37,7 +37,7 @@ const Game = (props) => {
           <img src={props.gameData.targetCountry.Country.flag}/>
         </div>
         {props.gameData.countries.map(country => {
-          return <GameOption country={country} key={country.id}/>
+          return <GameOption gameGuess={props.gameGuess} country={country} key={country.id}/>
         })}
       </div>
     

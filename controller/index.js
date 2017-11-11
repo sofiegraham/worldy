@@ -51,15 +51,12 @@ const updateUser = (req, res, next) => {
       email: user.dataValues.email,
       score: user.dataValues.score
     }
-
-    res.userObj = userObj;
-    console.log('user and bool', user.dataValues, bool);
-    next();
+    res.write(JSON.stringify(userObj));
+    res.end();
   });
 }
 
 const getCountries = (req, res, next) => {
-  console.log('GETTING COUNTRIES');
   db.UserCountry.findAll({
     where: { UserId: req.query.userid, flag: false },
     order: [ Sequelize.fn( 'RAND' )],
@@ -81,12 +78,33 @@ const getCountries = (req, res, next) => {
         targetCountry: randomUserCountryArr[0].dataValues,
         countries: _.shuffle(countrySelection)
       }
-      console.log('COUNT', countryData);
       res.write(JSON.stringify(countryData));
       res.end();
     })
   })
 }
 
+const updateScore = (req, res, end) => {
+
+  const columnName = req.body.columnName;
+
+  db.UserCountry.find({ 
+    where: { 
+      UserId: req.body.userId,
+      CountryId: req.body.countryId
+    }
+  })
+  .then(userCountry => {
+    console.log('FOUND IT', userCountry.dataValues);
+    if (userCountry) {
+      userCountry.updateAttributes({
+        [columnName]: req.body.newValue
+      })
+    }
+  });
+
+}
+
 exports.updateUser = updateUser;
 exports.getCountries = getCountries;
+exports.updateScore = updateScore;

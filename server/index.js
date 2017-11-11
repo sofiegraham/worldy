@@ -13,10 +13,9 @@ app.use(express.static(__dirname + '/../client/public'));
 
 const PORT = process.env.PORT || 1234;
 
-app.post('/user', ctrl.updateUser, (req, res, next) => {
-  console.log('posted user: ');
-  res.end();
-})
+app.post('/user', ctrl.updateUser);
+
+app.post('/score', ctrl.updateScore);
 
 app.get('/game/flag', ctrl.getCountries);
 
