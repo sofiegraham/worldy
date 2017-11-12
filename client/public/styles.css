@@ -1,3 +1,8 @@
 img {
   width: 150px;
 }
+
+#mapid { 
+  height: 300px;
+  width: 600px;
+}

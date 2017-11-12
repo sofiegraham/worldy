@@ -35,7 +35,7 @@ class App extends Component {
       password: 'password',
     }
 
-    const username = prompt("What is your username?");
+    //const username = prompt("What is your username?");
     
     this.getUser('cakes');
     this.setUser(newUser);
