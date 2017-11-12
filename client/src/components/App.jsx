@@ -4,6 +4,7 @@ import Promise from 'promise-polyfill';
 import Game from './Game.jsx';
 import UserProfile from './UserProfile.jsx';
 import Nav from './Nav.jsx';
+import Map from './Map.jsx';
 
 
 class App extends Component {
@@ -133,6 +134,7 @@ class App extends Component {
   render() {
     return (
       <div>
+        <Map />
         <Nav isLoggedIn={this.state.isLoggedIn}/>
         <UserProfile user={this.state.user}/>
         <Game gameGuess={this.gameGuess} gameData={this.state.gameData} gameIsPlaying={this.state.gameIsPlaying}/>

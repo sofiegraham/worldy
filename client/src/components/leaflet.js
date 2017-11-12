@@ -245,16 +245,16 @@ var statesData = {"type":"FeatureCollection","features":[
 //   accessToken: 'pk.eyJ1Ijoic29maWVncmFoYW0iLCJhIjoiY2o5dzB4cnVuMGYzdTJ4bWRqYTM4NGh2eCJ9.IPE6P6L3wKGkGYmj52W8qQ'
 // }).addTo(mymap);
 
-var mapboxAccessToken = 'pk.eyJ1Ijoic29maWVncmFoYW0iLCJhIjoiY2o5dzB4cnVuMGYzdTJ4bWRqYTM4NGh2eCJ9.IPE6P6L3wKGkGYmj52W8qQ';
-var map = L.map('mapid').setView([0.0, 0.0], 1.5);
+// var mapboxAccessToken = 'pk.eyJ1Ijoic29maWVncmFoYW0iLCJhIjoiY2o5dzB4cnVuMGYzdTJ4bWRqYTM4NGh2eCJ9.IPE6P6L3wKGkGYmj52W8qQ';
+// var map = L.map('mapid').setView([0.0, 0.0], 1.5);
 
-L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + mapboxAccessToken, {
-    id: 'mapbox.streets',
-    maxZoom: 1.5,
-    minZoom: 1.5,
-}).addTo(map);
+// L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + mapboxAccessToken, {
+//     id: 'mapbox.streets',
+//     maxZoom: 1.5,
+//     minZoom: 1.5,
+// }).addTo(map);
 
-L.geoJson(countries).addTo(map);
+// L.geoJson(countries).addTo(map);
 
 // function getColor(d) {
 //   return d > 1000 ? '#800026' :
