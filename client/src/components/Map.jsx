@@ -14,10 +14,10 @@ class Map extends Component {
 
   componentDidMount() {
     var mapboxAccessToken = 'pk.eyJ1Ijoic29maWVncmFoYW0iLCJhIjoiY2o5dzB4cnVuMGYzdTJ4bWRqYTM4NGh2eCJ9.IPE6P6L3wKGkGYmj52W8qQ';
-    var map = L.map('mapid').setView([0.0, 0.0], 2);
+    var map = L.map('mapid', {zoomControl:false}).setView([0.0, 0.0], 2);
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + mapboxAccessToken, {
-        id: 'mapbox.high-contrast',
+        id: 'mapbox.light',
         maxZoom: 2,
         minZoom: 2,
     }).addTo(map);
@@ -65,7 +65,7 @@ class Map extends Component {
   }
 
   getColor = (score) => {
-    return score === 0 ? '#800026' : '#FFEDA0';
+    return score === 0 ? '#d8d8d8' : '#02d188';
   }
 
   style = (feature) => {
@@ -73,7 +73,7 @@ class Map extends Component {
       fillColor: this.getColor(feature.score),
       weight: 1,
       opacity: 1,
-      color: 'black',
+      color: 'white',
       fillOpacity: 0.7
     };
   }

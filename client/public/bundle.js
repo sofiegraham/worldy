@@ -18318,10 +18318,26 @@ var App = function (_Component) {
       return _react2.default.createElement(
         'div',
         null,
-        this.state.countries.length > 0 && _react2.default.createElement(_Map2.default, { countries: this.state.countries, userCountries: this.state.user.countries }),
         _react2.default.createElement(_Nav2.default, { isLoggedIn: this.state.isLoggedIn }),
-        _react2.default.createElement(_UserProfile2.default, { user: this.state.user }),
-        _react2.default.createElement(_Game2.default, { gameGuess: this.gameGuess, gameData: this.state.gameData, gameIsPlaying: this.state.gameIsPlaying })
+        _react2.default.createElement(
+          'div',
+          { className: 'container' },
+          _react2.default.createElement(
+            'div',
+            { className: 'row' },
+            _react2.default.createElement(
+              'div',
+              { className: 'col-4' },
+              _react2.default.createElement(_Game2.default, { gameGuess: this.gameGuess, gameData: this.state.gameData, gameIsPlaying: this.state.gameIsPlaying })
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'col' },
+              this.state.countries.length > 0 && _react2.default.createElement(_Map2.default, { countries: this.state.countries, userCountries: this.state.user.countries }),
+              _react2.default.createElement(_UserProfile2.default, { user: this.state.user })
+            )
+          )
+        )
       );
     }
   }]);
@@ -19452,7 +19468,7 @@ var Game = function Game(props) {
   if (!props.gameIsPlaying) {
     return _react2.default.createElement(
       'div',
-      null,
+      { className: 'game' },
       _react2.default.createElement(
         'p',
         null,
@@ -19462,10 +19478,10 @@ var Game = function Game(props) {
   } else {
     return _react2.default.createElement(
       'div',
-      null,
+      { className: 'game' },
       _react2.default.createElement(
         'div',
-        null,
+        { className: 'flag' },
         _react2.default.createElement('img', { src: props.gameData.targetCountry.Country.flag })
       ),
       props.gameData.countries.map(function (country) {
@@ -19500,7 +19516,7 @@ var GameOption = function GameOption(props) {
     { className: 'row' },
     _react2.default.createElement(
       'div',
-      { className: 'col', onClick: function onClick(e) {
+      { className: 'col game-option', onClick: function onClick(e) {
           return props.gameGuess(props.country);
         } },
       _react2.default.createElement(
@@ -19534,7 +19550,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var UserProfile = function UserProfile(props) {
   return _react2.default.createElement(
     'div',
-    null,
+    { className: 'profile' },
     _react2.default.createElement(
       'div',
       null,
@@ -19575,7 +19591,7 @@ var Nav = function Nav(props) {
   if (props.isLoggedIn) {
     return _react2.default.createElement(
       'div',
-      null,
+      { className: 'navbar' },
       _react2.default.createElement(
         'p',
         null,
@@ -19585,7 +19601,7 @@ var Nav = function Nav(props) {
   } else {
     return _react2.default.createElement(
       'div',
-      null,
+      { className: 'navbar' },
       _react2.default.createElement(
         'p',
         null,
@@ -19640,7 +19656,7 @@ var Map = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Map.__proto__ || Object.getPrototypeOf(Map)).call(this, props));
 
     _this.getColor = function (score) {
-      return score === 0 ? '#800026' : '#FFEDA0';
+      return score === 0 ? '#d8d8d8' : '#02d188';
     };
 
     _this.style = function (feature) {
@@ -19648,7 +19664,7 @@ var Map = function (_Component) {
         fillColor: _this.getColor(feature.score),
         weight: 1,
         opacity: 1,
-        color: 'black',
+        color: 'white',
         fillOpacity: 0.7
       };
     };
@@ -19666,10 +19682,10 @@ var Map = function (_Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       var mapboxAccessToken = 'pk.eyJ1Ijoic29maWVncmFoYW0iLCJhIjoiY2o5dzB4cnVuMGYzdTJ4bWRqYTM4NGh2eCJ9.IPE6P6L3wKGkGYmj52W8qQ';
-      var map = L.map('mapid').setView([0.0, 0.0], 2);
+      var map = L.map('mapid', { zoomControl: false }).setView([0.0, 0.0], 2);
 
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + mapboxAccessToken, {
-        id: 'mapbox.high-contrast',
+        id: 'mapbox.light',
         maxZoom: 2,
         minZoom: 2
       }).addTo(map);

@@ -4,15 +4,15 @@ import GameOption from './GameOption.jsx';
 const Game = (props) => {
   if(!props.gameIsPlaying) {
     return (
-      <div>
+      <div className='game'>
         <p>Please start a game</p>
       </div>
     )
 
   } else {
     return (
-      <div>
-        <div>
+      <div className='game'>
+        <div className='flag'>
           <img src={props.gameData.targetCountry.Country.flag}/>
         </div>
         {props.gameData.countries.map(country => {

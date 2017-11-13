@@ -162,10 +162,19 @@ class App extends Component {
   render() {
     return (
       <div>
-        {this.state.countries.length > 0 && <Map countries={this.state.countries} userCountries={this.state.user.countries} />}
         <Nav isLoggedIn={this.state.isLoggedIn}/>
-        <UserProfile user={this.state.user}/>
-        <Game gameGuess={this.gameGuess} gameData={this.state.gameData} gameIsPlaying={this.state.gameIsPlaying}/>
+        <div className='container'>
+          
+          <div className='row'>
+            <div className='col-4'>
+              <Game gameGuess={this.gameGuess} gameData={this.state.gameData} gameIsPlaying={this.state.gameIsPlaying}/>
+            </div>
+            <div className='col'>
+              {this.state.countries.length > 0 && <Map countries={this.state.countries} userCountries={this.state.user.countries} />}
+              <UserProfile user={this.state.user}/>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

@@ -1,8 +1,45 @@
+html {
+  height: 100%;
+}
+body {
+  height: 100%;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background: linear-gradient(#4264fb, #3c3ce1);
+}
+
+.navbar {
+  margin-bottom: 10px;
+  background-color: white;
+  width: 100%;
+}
+
+.flag {
+  text-align: center;
+}
+
+.col, .col-4 {
+  background-color: white;
+  margin: 15px;
+  padding: 0px;
+}
+
+.game-option {
+  padding: 10px 10px;
+  border: 1px solid #e4e4e4;
+  margin: 0 50px;
+  vertical-align: middle;
+}
+
+.game-option p {
+  margin: 0;
+}
+
 img {
   width: 150px;
 }
 
 #mapid { 
   height: 300px;
-  width: 600px;
 }
