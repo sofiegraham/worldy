@@ -18369,10 +18369,11 @@ var _initialiseProps = function _initialiseProps() {
         body: JSON.stringify(newData)
       }).then(function (response) {
         return response.json();
-      }).then(function (score) {
-        console.log('DATA', score);
+      }).then(function (responseData) {
+        console.log('DATA', responseData);
         var updateUser = app.state.user;
-        updateUser.score = score;
+        updateUser.score = responseData.userScore;
+        updateUser.countries = responseData.userCountryData;
         app.setState({
           user: updateUser
         });
@@ -19652,29 +19653,49 @@ var Map = function (_Component) {
       };
     };
 
+    _this.state = {
+      map: {},
+      geoJson: {}
+    };
+    _this.geoJson;
+
     return _this;
   }
-
-  // componentDidMount() {
-  //   var mapboxAccessToken = 'pk.eyJ1Ijoic29maWVncmFoYW0iLCJhIjoiY2o5dzB4cnVuMGYzdTJ4bWRqYTM4NGh2eCJ9.IPE6P6L3wKGkGYmj52W8qQ';
-  //   var map = L.map('mapid').setView([0.0, 0.0], 2);
-
-  //   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + mapboxAccessToken, {
-  //       id: 'mapbox.high-contrast',
-  //       maxZoom: 2,
-  //       minZoom: 2,
-  //   }).addTo(map);
-
-  //   L.geoJson(countryJson, {style: this.style}).addTo(map);
-
-  // }
 
   _createClass(Map, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
+      var mapboxAccessToken = 'pk.eyJ1Ijoic29maWVncmFoYW0iLCJhIjoiY2o5dzB4cnVuMGYzdTJ4bWRqYTM4NGh2eCJ9.IPE6P6L3wKGkGYmj52W8qQ';
+      var map = L.map('mapid').setView([0.0, 0.0], 2);
+
+      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + mapboxAccessToken, {
+        id: 'mapbox.high-contrast',
+        maxZoom: 2,
+        minZoom: 2
+      }).addTo(map);
+
+      var geoJson = L.geoJson(_workingOutGeo2.default, { style: this.style }).addTo(map);
+      this.geoJson = geoJson;
+
+      this.setState({
+        map: map
+      });
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
       var _this2 = this;
 
       //debugger;
+      // layer.clearLayers(); // inherited from LayerGroup
+      // layer.addData(newData);
+
+      // this.state.map.eachLayer(layer => {
+      //   console.log(layer);
+      //   this.state.map.removeLayer(layer);
+      // });
+      this.state.map.removeLayer(this.geoJson);
+
       var geoJSON = { "type": "FeatureCollection", "features": [] };
       this.props.countries.map(function (country) {
         var userCountry = _this2.props.userCountries.find(function (el) {
@@ -19687,16 +19708,9 @@ var Map = function (_Component) {
         return country.geometry;
       });
 
-      var mapboxAccessToken = 'pk.eyJ1Ijoic29maWVncmFoYW0iLCJhIjoiY2o5dzB4cnVuMGYzdTJ4bWRqYTM4NGh2eCJ9.IPE6P6L3wKGkGYmj52W8qQ';
-      var map = L.map('mapid').setView([0.0, 0.0], 2);
+      var geoJson = L.geoJson(geoJSON, { style: this.style }).addTo(this.state.map);
 
-      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + mapboxAccessToken, {
-        id: 'mapbox.high-contrast',
-        maxZoom: 2,
-        minZoom: 2
-      }).addTo(map);
-
-      L.geoJson(geoJSON, { style: this.style }).addTo(map);
+      this.geoJson = geoJson;
     }
   }, {
     key: 'render',

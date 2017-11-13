@@ -85,10 +85,11 @@ class App extends Component {
         body: JSON.stringify(newData)
       }).then(response => {
         return response.json();
-      }).then(function(score) {
-        console.log('DATA', score);
+      }).then(responseData => {
+        console.log('DATA', responseData);
         const updateUser = app.state.user;
-        updateUser.score = score
+        updateUser.score = responseData.userScore;
+        updateUser.countries = responseData.userCountryData;
         app.setState({
           user: updateUser
         })

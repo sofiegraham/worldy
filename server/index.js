@@ -27,7 +27,14 @@ app.post('/login', ctrl.getUserData, ctrl.getUserCountryData, (req, res, next) =
   res.end();
 });
 
-app.post('/score', ctrl.updateUserCountryScore, ctrl.getRecaluculatedUserScore);
+app.post('/score', ctrl.updateUserCountryScore, ctrl.getUserCountryData, ctrl.getRecaluculatedUserScore, (req, res, next) => {
+  const responseData = {
+    userCountryData: req.userCountryData,
+    userScore: req.userScore
+  }
+  res.write(JSON.stringify(responseData));
+  res.end();
+});
 
 app.get('/game/flag', ctrl.getCountries);
 

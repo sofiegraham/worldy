@@ -68,6 +68,7 @@ const getUserData = (req, res, next) => {
     } else {
       console.log('SUCCESS for', req.body.username);
       req.userData = user.dataValues;
+      req.userId = user.dataValues.id;
       next();
     }
   }).catch(error => {
@@ -77,9 +78,8 @@ const getUserData = (req, res, next) => {
 }
 
 const getUserCountryData = (req, res, next) => {
-  console.log('CO', req.userData );
   db.UserCountry.findAll({
-    where: { UserId: req.userData.id},
+    where: { UserId: req.userId},
   })
   .then(userCountryArr => {
     if(userCountryArr.length) {
@@ -191,8 +191,7 @@ const getRecaluculatedUserScore = (req, res, next) => {
       return user.updateAttributes({score: req.userScore});
     }
   }).then(() => {
-    res.write(JSON.stringify(req.userScore));
-    res.end();
+    next();
   })
 }
 
