@@ -20,7 +20,8 @@ class App extends Component {
         countries: []
       },
       gameData: {},
-      gameIsPlaying: false
+      gameIsPlaying: false,
+      countries: []
     }
     // const name = prompt("Please enter your name");
     // const email = prompt("Please enter your email");
@@ -33,6 +34,7 @@ class App extends Component {
 
     //const username = prompt("What is your username?");
     this.setUser(newUser);
+    this.getCountryData();
     
     
   }
@@ -42,8 +44,28 @@ class App extends Component {
       resolve(this.getUser('sofie'));
     })
     .then(() => {
-      this.fetchGameData();
+      this.fetchGameData(); //fetchCountryData
     })
+  }
+
+  getCountryData = () => {
+    const app = this;
+    fetch('/countries', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => {
+      return response.json();
+    }).then(countries => {
+      const parsed = countries.map(country => {
+        country.geometry = JSON.parse(country.geometry);
+        return country;
+      });
+      app.setState({
+        countries: parsed
+      })
+    });
   }
 
   gameGuess = (country) => {
@@ -139,7 +161,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Map />
+        {this.state.countries.length > 0 && <Map countries={this.state.countries} userCountries={this.state.user.countries} />}
         <Nav isLoggedIn={this.state.isLoggedIn}/>
         <UserProfile user={this.state.user}/>
         <Game gameGuess={this.gameGuess} gameData={this.state.gameData} gameIsPlaying={this.state.gameIsPlaying}/>

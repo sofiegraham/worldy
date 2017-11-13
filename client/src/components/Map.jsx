@@ -7,7 +7,34 @@ class Map extends Component {
 
   }
 
+  // componentDidMount() {
+  //   var mapboxAccessToken = 'pk.eyJ1Ijoic29maWVncmFoYW0iLCJhIjoiY2o5dzB4cnVuMGYzdTJ4bWRqYTM4NGh2eCJ9.IPE6P6L3wKGkGYmj52W8qQ';
+  //   var map = L.map('mapid').setView([0.0, 0.0], 2);
+
+  //   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + mapboxAccessToken, {
+  //       id: 'mapbox.high-contrast',
+  //       maxZoom: 2,
+  //       minZoom: 2,
+  //   }).addTo(map);
+
+  //   L.geoJson(countryJson, {style: this.style}).addTo(map);
+
+  // }
+
   componentDidMount() {
+    //debugger;
+    const geoJSON = {"type":"FeatureCollection","features":[]};
+    this.props.countries.map(country => {
+      const userCountry = this.props.userCountries.find((el) => {
+        return el.CountryId === country.id
+      });
+      if(userCountry && country.geometry) {
+        country.geometry.score = userCountry.score;
+        geoJSON.features.push(country.geometry);
+      }
+      return country.geometry;
+    });
+
     var mapboxAccessToken = 'pk.eyJ1Ijoic29maWVncmFoYW0iLCJhIjoiY2o5dzB4cnVuMGYzdTJ4bWRqYTM4NGh2eCJ9.IPE6P6L3wKGkGYmj52W8qQ';
     var map = L.map('mapid').setView([0.0, 0.0], 2);
 
@@ -17,7 +44,7 @@ class Map extends Component {
         minZoom: 2,
     }).addTo(map);
 
-    L.geoJson(countryJson, {style: this.style}).addTo(map);
+    L.geoJson(geoJSON, {style: this.style}).addTo(map);
 
   }
 

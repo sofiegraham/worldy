@@ -98,6 +98,17 @@ const getUserCountryData = (req, res, next) => {
   })
 }
 
+const getAllCountryData = (req, res, next) => {
+  db.Country.findAll({})
+  .then(countriesArr => {
+    const countriesData = countriesArr.map(country => {
+      return country.dataValues;
+    })
+    res.write(JSON.stringify(countriesData));
+    res.end();
+  })
+}
+
 const getCountries = (req, res, next) => {
   console.log('GHSJHAJKSKSLASDJA', req.query.userid);
   db.UserCountry.findAll({
@@ -191,3 +202,4 @@ exports.getUserCountryData = getUserCountryData;
 exports.updateUserCountryScore = updateUserCountryScore;
 exports.getRecaluculatedUserScore = getRecaluculatedUserScore;
 exports.getUserData = getUserData;
+exports.getAllCountryData = getAllCountryData;

@@ -18284,7 +18284,8 @@ var App = function (_Component) {
         countries: []
       },
       gameData: {},
-      gameIsPlaying: false
+      gameIsPlaying: false,
+      countries: []
       // const name = prompt("Please enter your name");
       // const email = prompt("Please enter your email");
       // const password = prompt("Please enter your password");
@@ -18295,6 +18296,7 @@ var App = function (_Component) {
 
       //const username = prompt("What is your username?");
     };_this.setUser(newUser);
+    _this.getCountryData();
 
     return _this;
   }
@@ -18307,7 +18309,7 @@ var App = function (_Component) {
       return new _promisePolyfill2.default(function (resolve, reject) {
         resolve(_this2.getUser('sofie'));
       }).then(function () {
-        _this2.fetchGameData();
+        _this2.fetchGameData(); //fetchCountryData
       });
     }
   }, {
@@ -18316,7 +18318,7 @@ var App = function (_Component) {
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(_Map2.default, null),
+        this.state.countries.length > 0 && _react2.default.createElement(_Map2.default, { countries: this.state.countries, userCountries: this.state.user.countries }),
         _react2.default.createElement(_Nav2.default, { isLoggedIn: this.state.isLoggedIn }),
         _react2.default.createElement(_UserProfile2.default, { user: this.state.user }),
         _react2.default.createElement(_Game2.default, { gameGuess: this.gameGuess, gameData: this.state.gameData, gameIsPlaying: this.state.gameIsPlaying })
@@ -18329,6 +18331,26 @@ var App = function (_Component) {
 
 var _initialiseProps = function _initialiseProps() {
   var _this3 = this;
+
+  this.getCountryData = function () {
+    var app = _this3;
+    fetch('/countries', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function (response) {
+      return response.json();
+    }).then(function (countries) {
+      var parsed = countries.map(function (country) {
+        country.geometry = JSON.parse(country.geometry);
+        return country;
+      });
+      app.setState({
+        countries: parsed
+      });
+    });
+  };
 
   this.gameGuess = function (country) {
     var app = _this3;
@@ -19633,9 +19655,38 @@ var Map = function (_Component) {
     return _this;
   }
 
+  // componentDidMount() {
+  //   var mapboxAccessToken = 'pk.eyJ1Ijoic29maWVncmFoYW0iLCJhIjoiY2o5dzB4cnVuMGYzdTJ4bWRqYTM4NGh2eCJ9.IPE6P6L3wKGkGYmj52W8qQ';
+  //   var map = L.map('mapid').setView([0.0, 0.0], 2);
+
+  //   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + mapboxAccessToken, {
+  //       id: 'mapbox.high-contrast',
+  //       maxZoom: 2,
+  //       minZoom: 2,
+  //   }).addTo(map);
+
+  //   L.geoJson(countryJson, {style: this.style}).addTo(map);
+
+  // }
+
   _createClass(Map, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
+      var _this2 = this;
+
+      //debugger;
+      var geoJSON = { "type": "FeatureCollection", "features": [] };
+      this.props.countries.map(function (country) {
+        var userCountry = _this2.props.userCountries.find(function (el) {
+          return el.CountryId === country.id;
+        });
+        if (userCountry && country.geometry) {
+          country.geometry.score = userCountry.score;
+          geoJSON.features.push(country.geometry);
+        }
+        return country.geometry;
+      });
+
       var mapboxAccessToken = 'pk.eyJ1Ijoic29maWVncmFoYW0iLCJhIjoiY2o5dzB4cnVuMGYzdTJ4bWRqYTM4NGh2eCJ9.IPE6P6L3wKGkGYmj52W8qQ';
       var map = L.map('mapid').setView([0.0, 0.0], 2);
 
@@ -19645,7 +19696,7 @@ var Map = function (_Component) {
         minZoom: 2
       }).addTo(map);
 
-      L.geoJson(_workingOutGeo2.default, { style: this.style }).addTo(map);
+      L.geoJson(geoJSON, { style: this.style }).addTo(map);
     }
   }, {
     key: 'render',

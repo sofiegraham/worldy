@@ -31,6 +31,8 @@ app.post('/score', ctrl.updateUserCountryScore, ctrl.getRecaluculatedUserScore);
 
 app.get('/game/flag', ctrl.getCountries);
 
+app.get('/countries', ctrl.getAllCountryData);
+
 app.listen(PORT, function() {
   console.log(`listening on port ${PORT}`);
 });
