@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import countryJson from './workingOutGeo.js';
 
 class Map extends Component {
   constructor(props) {
@@ -22,7 +21,7 @@ class Map extends Component {
         minZoom: 2,
     }).addTo(map);
 
-    const geoJson = L.geoJson(countryJson, {style: this.style}).addTo(map);
+    const geoJson = L.geoJson(this.geoJson, {style: this.style}).addTo(map);
     this.geoJson = geoJson;
     
     this.setState({
@@ -32,14 +31,6 @@ class Map extends Component {
   }
 
   componentDidUpdate() {
-    //debugger;
-    // layer.clearLayers(); // inherited from LayerGroup
-    // layer.addData(newData);
-
-    // this.state.map.eachLayer(layer => {
-    //   console.log(layer);
-    //   this.state.map.removeLayer(layer);
-    // });
     this.state.map.removeLayer(this.geoJson);
 
     const geoJSON = {"type":"FeatureCollection","features":[]};

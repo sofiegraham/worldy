@@ -18386,7 +18386,6 @@ var _initialiseProps = function _initialiseProps() {
       }).then(function (response) {
         return response.json();
       }).then(function (responseData) {
-        console.log('DATA', responseData);
         var updateUser = app.state.user;
         updateUser.score = responseData.userScore;
         updateUser.countries = responseData.userCountryData;
@@ -18436,7 +18435,6 @@ var _initialiseProps = function _initialiseProps() {
       app.setState({
         user: userObj
       });
-      console.log('JSON', userObj);
     }).catch(function (error) {
       console.log(error);
     });
@@ -18449,9 +18447,7 @@ var _initialiseProps = function _initialiseProps() {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(newUser)
-    }).then(function (response) {
-      console.log(response);
-    });
+    }).then(function (response) {});
   };
 };
 
@@ -19482,7 +19478,7 @@ var Game = function Game(props) {
       _react2.default.createElement(
         'div',
         { className: 'flag' },
-        _react2.default.createElement('img', { src: props.gameData.targetCountry.Country.flag })
+        _react2.default.createElement('img', { className: 'flag-img', src: props.gameData.targetCountry.Country.flag })
       ),
       props.gameData.countries.map(function (country) {
         return _react2.default.createElement(_GameOption2.default, { gameGuess: props.gameGuess, country: country, key: country.id });
@@ -19513,17 +19509,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var GameOption = function GameOption(props) {
   return _react2.default.createElement(
     'div',
-    { className: 'row' },
+    { className: 'game-option', onClick: function onClick(e) {
+        return props.gameGuess(props.country);
+      } },
     _react2.default.createElement(
-      'div',
-      { className: 'col game-option', onClick: function onClick(e) {
-          return props.gameGuess(props.country);
-        } },
-      _react2.default.createElement(
-        'p',
-        null,
-        props.country.name
-      )
+      'p',
+      null,
+      props.country.name
     )
   );
 };
@@ -19553,16 +19545,35 @@ var UserProfile = function UserProfile(props) {
     { className: 'profile' },
     _react2.default.createElement(
       'div',
-      null,
+      { className: 'profile-row' },
       _react2.default.createElement(
-        'h1',
-        null,
-        props.user.name
+        'div',
+        { className: 'profile-col' },
+        _react2.default.createElement('img', { className: 'profile-img', src: 'https://avatars1.githubusercontent.com/u/10235700?s=460&v=4' })
       ),
       _react2.default.createElement(
-        'p',
-        null,
-        props.user.score
+        'div',
+        { className: 'profile-col' },
+        _react2.default.createElement(
+          'p',
+          { className: 'username' },
+          props.user.name
+        )
+      ),
+      _react2.default.createElement(
+        'div',
+        { className: 'profile-col float-right' },
+        _react2.default.createElement(
+          'p',
+          { className: 'score' },
+          props.user.score,
+          ' ',
+          _react2.default.createElement(
+            'span',
+            { className: 'total-countries' },
+            '/ 249'
+          )
+        )
       )
     )
   );
@@ -19603,14 +19614,31 @@ var Nav = function Nav(props) {
       'div',
       { className: 'navbar' },
       _react2.default.createElement(
-        'p',
-        null,
-        'Log in'
-      ),
-      _react2.default.createElement(
-        'p',
-        null,
-        'Sign up'
+        'div',
+        { className: 'navbar-inner container' },
+        _react2.default.createElement(
+          'ul',
+          null,
+          _react2.default.createElement(
+            'li',
+            { className: 'logo' },
+            'Worldly'
+          )
+        ),
+        _react2.default.createElement(
+          'ul',
+          null,
+          _react2.default.createElement(
+            'li',
+            null,
+            'Log in'
+          ),
+          _react2.default.createElement(
+            'li',
+            null,
+            'Sign up'
+          )
+        )
       )
     );
   }
@@ -19634,10 +19662,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
-
-var _workingOutGeo = __webpack_require__(40);
-
-var _workingOutGeo2 = _interopRequireDefault(_workingOutGeo);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19690,7 +19714,7 @@ var Map = function (_Component) {
         minZoom: 2
       }).addTo(map);
 
-      var geoJson = L.geoJson(_workingOutGeo2.default, { style: this.style }).addTo(map);
+      var geoJson = L.geoJson(this.geoJson, { style: this.style }).addTo(map);
       this.geoJson = geoJson;
 
       this.setState({
@@ -19702,14 +19726,6 @@ var Map = function (_Component) {
     value: function componentDidUpdate() {
       var _this2 = this;
 
-      //debugger;
-      // layer.clearLayers(); // inherited from LayerGroup
-      // layer.addData(newData);
-
-      // this.state.map.eachLayer(layer => {
-      //   console.log(layer);
-      //   this.state.map.removeLayer(layer);
-      // });
       this.state.map.removeLayer(this.geoJson);
 
       var geoJSON = { "type": "FeatureCollection", "features": [] };
@@ -19816,39 +19832,6 @@ var countries = { "type": "FeatureCollection", "features": [{ "type": "Feature",
   // L.geoJson(statesData, {style: style}).addTo(map);
 
 };
-
-/***/ }),
-/* 40 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var countryData = [{ "name": "Afghanistan", "topLevelDomain": [".af"], "alpha2Code": "AF", "alpha3Code": "AFG", "callingCodes": ["93"], "capital": "Kabul", "altSpellings": ["AF", "Afġānistān"], "region": "Asia", "subregion": "Southern Asia", "population": 27657145, "latlng": [33.0, 65.0], "demonym": "Afghan", "area": 652230.0, "gini": 27.8, "timezones": ["UTC+04:30"], "borders": ["IRN", "PAK", "TKM", "UZB", "TJK", "CHN"], "nativeName": "افغانستان", "numericCode": "004", "currencies": [{ "code": "AFN", "name": "Afghan afghani", "symbol": "؋" }], "languages": [{ "iso639_1": "ps", "iso639_2": "pus", "name": "Pashto", "nativeName": "پښتو" }, { "iso639_1": "uz", "iso639_2": "uzb", "name": "Uzbek", "nativeName": "Oʻzbek" }, { "iso639_1": "tk", "iso639_2": "tuk", "name": "Turkmen", "nativeName": "Türkmen" }], "translations": { "de": "Afghanistan", "es": "Afganistán", "fr": "Afghanistan", "ja": "アフガニスタン", "it": "Afghanistan", "br": "Afeganistão", "pt": "Afeganistão", "nl": "Afghanistan", "hr": "Afganistan", "fa": "افغانستان" }, "flag": "https://restcountries.eu/data/afg.svg", "regionalBlocs": [{ "acronym": "SAARC", "name": "South Asian Association for Regional Cooperation", "otherAcronyms": [], "otherNames": [] }], "cioc": "AFG" }, { "name": "Zambia", "topLevelDomain": [".zm"], "alpha2Code": "ZM", "alpha3Code": "ZMB", "callingCodes": ["260"], "capital": "Lusaka", "altSpellings": ["ZM", "Republic of Zambia"], "region": "Africa", "subregion": "Eastern Africa", "population": 15933883, "latlng": [-15.0, 30.0], "demonym": "Zambian", "area": 752612.0, "gini": 54.6, "timezones": ["UTC+02:00"], "borders": ["AGO", "BWA", "COD", "MWI", "MOZ", "NAM", "TZA", "ZWE"], "nativeName": "Zambia", "numericCode": "894", "currencies": [{ "code": "ZMW", "name": "Zambian kwacha", "symbol": "ZK" }], "languages": [{ "iso639_1": "en", "iso639_2": "eng", "name": "English", "nativeName": "English" }], "translations": { "de": "Sambia", "es": "Zambia", "fr": "Zambie", "ja": "ザンビア", "it": "Zambia", "br": "Zâmbia", "pt": "Zâmbia", "nl": "Zambia", "hr": "Zambija", "fa": "زامبیا" }, "flag": "https://restcountries.eu/data/zmb.svg", "regionalBlocs": [{ "acronym": "AU", "name": "African Union", "otherAcronyms": [], "otherNames": ["الاتحاد الأفريقي", "Union africaine", "União Africana", "Unión Africana", "Umoja wa Afrika"] }], "cioc": "ZAM" }];
-
-var geoData = [{ "type": "Feature", "id": "AFG", "properties": { "name": "Afghanistan" }, "geometry": { "type": "Polygon", "coordinates": [[[61.210817, 35.650072], [62.230651, 35.270664], [62.984662, 35.404041], [63.193538, 35.857166], [63.982896, 36.007957], [64.546479, 36.312073], [64.746105, 37.111818], [65.588948, 37.305217], [65.745631, 37.661164], [66.217385, 37.39379], [66.518607, 37.362784], [67.075782, 37.356144], [67.83, 37.144994], [68.135562, 37.023115], [68.859446, 37.344336], [69.196273, 37.151144], [69.518785, 37.608997], [70.116578, 37.588223], [70.270574, 37.735165], [70.376304, 38.138396], [70.806821, 38.486282], [71.348131, 38.258905], [71.239404, 37.953265], [71.541918, 37.905774], [71.448693, 37.065645], [71.844638, 36.738171], [72.193041, 36.948288], [72.63689, 37.047558], [73.260056, 37.495257], [73.948696, 37.421566], [74.980002, 37.41999], [75.158028, 37.133031], [74.575893, 37.020841], [74.067552, 36.836176], [72.920025, 36.720007], [71.846292, 36.509942], [71.262348, 36.074388], [71.498768, 35.650563], [71.613076, 35.153203], [71.115019, 34.733126], [71.156773, 34.348911], [70.881803, 33.988856], [69.930543, 34.02012], [70.323594, 33.358533], [69.687147, 33.105499], [69.262522, 32.501944], [69.317764, 31.901412], [68.926677, 31.620189], [68.556932, 31.71331], [67.792689, 31.58293], [67.683394, 31.303154], [66.938891, 31.304911], [66.381458, 30.738899], [66.346473, 29.887943], [65.046862, 29.472181], [64.350419, 29.560031], [64.148002, 29.340819], [63.550261, 29.468331], [62.549857, 29.318572], [60.874248, 29.829239], [61.781222, 30.73585], [61.699314, 31.379506], [60.941945, 31.548075], [60.863655, 32.18292], [60.536078, 32.981269], [60.9637, 33.528832], [60.52843, 33.676446], [60.803193, 34.404102], [61.210817, 35.650072]]] } }, { "type": "Feature", "id": "ZMB", "properties": { "name": "Zambia" }, "geometry": { "type": "Polygon", "coordinates": [[[32.759375, -9.230599], [33.231388, -9.676722], [33.485688, -10.525559], [33.31531, -10.79655], [33.114289, -11.607198], [33.306422, -12.435778], [32.991764, -12.783871], [32.688165, -13.712858], [33.214025, -13.97186], [30.179481, -14.796099], [30.274256, -15.507787], [29.516834, -15.644678], [28.947463, -16.043051], [28.825869, -16.389749], [28.467906, -16.4684], [27.598243, -17.290831], [27.044427, -17.938026], [26.706773, -17.961229], [26.381935, -17.846042], [25.264226, -17.73654], [25.084443, -17.661816], [25.07695, -17.578823], [24.682349, -17.353411], [24.033862, -17.295843], [23.215048, -17.523116], [22.562478, -16.898451], [21.887843, -16.08031], [21.933886, -12.898437], [24.016137, -12.911046], [23.930922, -12.565848], [24.079905, -12.191297], [23.904154, -11.722282], [24.017894, -11.237298], [23.912215, -10.926826], [24.257155, -10.951993], [24.314516, -11.262826], [24.78317, -11.238694], [25.418118, -11.330936], [25.75231, -11.784965], [26.553088, -11.92444], [27.16442, -11.608748], [27.388799, -12.132747], [28.155109, -12.272481], [28.523562, -12.698604], [28.934286, -13.248958], [29.699614, -13.257227], [29.616001, -12.178895], [29.341548, -12.360744], [28.642417, -11.971569], [28.372253, -11.793647], [28.49607, -10.789884], [28.673682, -9.605925], [28.449871, -9.164918], [28.734867, -8.526559], [29.002912, -8.407032], [30.346086, -8.238257], [30.740015, -8.340007], [31.157751, -8.594579], [31.556348, -8.762049], [32.191865, -8.930359], [32.759375, -9.230599]]] } }];
-
-var userCountryData = [{ CountryId: 1, score: 0 }, { CountryId: 10, score: 1 }];
-
-var databaseData = [{ id: 1, "name": "Afghanistan", "code": "AFG", "capital": "Kabul", "population": 27657145, "currency": "Afghan afghani", "language": "Pashto", "flag": "https://restcountries.eu/data/afg.svg", geometry: { "type": "Feature", "id": "AFG", "properties": { "name": "Afghanistan" }, "geometry": { "type": "Polygon", "coordinates": [[[61.210817, 35.650072], [62.230651, 35.270664], [62.984662, 35.404041], [63.193538, 35.857166], [63.982896, 36.007957], [64.546479, 36.312073], [64.746105, 37.111818], [65.588948, 37.305217], [65.745631, 37.661164], [66.217385, 37.39379], [66.518607, 37.362784], [67.075782, 37.356144], [67.83, 37.144994], [68.135562, 37.023115], [68.859446, 37.344336], [69.196273, 37.151144], [69.518785, 37.608997], [70.116578, 37.588223], [70.270574, 37.735165], [70.376304, 38.138396], [70.806821, 38.486282], [71.348131, 38.258905], [71.239404, 37.953265], [71.541918, 37.905774], [71.448693, 37.065645], [71.844638, 36.738171], [72.193041, 36.948288], [72.63689, 37.047558], [73.260056, 37.495257], [73.948696, 37.421566], [74.980002, 37.41999], [75.158028, 37.133031], [74.575893, 37.020841], [74.067552, 36.836176], [72.920025, 36.720007], [71.846292, 36.509942], [71.262348, 36.074388], [71.498768, 35.650563], [71.613076, 35.153203], [71.115019, 34.733126], [71.156773, 34.348911], [70.881803, 33.988856], [69.930543, 34.02012], [70.323594, 33.358533], [69.687147, 33.105499], [69.262522, 32.501944], [69.317764, 31.901412], [68.926677, 31.620189], [68.556932, 31.71331], [67.792689, 31.58293], [67.683394, 31.303154], [66.938891, 31.304911], [66.381458, 30.738899], [66.346473, 29.887943], [65.046862, 29.472181], [64.350419, 29.560031], [64.148002, 29.340819], [63.550261, 29.468331], [62.549857, 29.318572], [60.874248, 29.829239], [61.781222, 30.73585], [61.699314, 31.379506], [60.941945, 31.548075], [60.863655, 32.18292], [60.536078, 32.981269], [60.9637, 33.528832], [60.52843, 33.676446], [60.803193, 34.404102], [61.210817, 35.650072]]] } } }, { id: 10, "name": "Zambia", "code": "ZMB", "capital": "Kabul", "population": 27657145, "currency": "Afghan afghani", "language": "Pashto", "flag": "https://restcountries.eu/data/afg.svg", geometry: { "type": "Feature", "id": "ZMB", "properties": { "name": "Zambia" }, "geometry": { "type": "Polygon", "coordinates": [[[32.759375, -9.230599], [33.231388, -9.676722], [33.485688, -10.525559], [33.31531, -10.79655], [33.114289, -11.607198], [33.306422, -12.435778], [32.991764, -12.783871], [32.688165, -13.712858], [33.214025, -13.97186], [30.179481, -14.796099], [30.274256, -15.507787], [29.516834, -15.644678], [28.947463, -16.043051], [28.825869, -16.389749], [28.467906, -16.4684], [27.598243, -17.290831], [27.044427, -17.938026], [26.706773, -17.961229], [26.381935, -17.846042], [25.264226, -17.73654], [25.084443, -17.661816], [25.07695, -17.578823], [24.682349, -17.353411], [24.033862, -17.295843], [23.215048, -17.523116], [22.562478, -16.898451], [21.887843, -16.08031], [21.933886, -12.898437], [24.016137, -12.911046], [23.930922, -12.565848], [24.079905, -12.191297], [23.904154, -11.722282], [24.017894, -11.237298], [23.912215, -10.926826], [24.257155, -10.951993], [24.314516, -11.262826], [24.78317, -11.238694], [25.418118, -11.330936], [25.75231, -11.784965], [26.553088, -11.92444], [27.16442, -11.608748], [27.388799, -12.132747], [28.155109, -12.272481], [28.523562, -12.698604], [28.934286, -13.248958], [29.699614, -13.257227], [29.616001, -12.178895], [29.341548, -12.360744], [28.642417, -11.971569], [28.372253, -11.793647], [28.49607, -10.789884], [28.673682, -9.605925], [28.449871, -9.164918], [28.734867, -8.526559], [29.002912, -8.407032], [30.346086, -8.238257], [30.740015, -8.340007], [31.157751, -8.594579], [31.556348, -8.762049], [32.191865, -8.930359], [32.759375, -9.230599]]] } } }];
-
-var generateGeoJSON = function generateGeoJSON(databaseData, userCountryData) {
-  var geoJSON = { "type": "FeatureCollection", "features": [] };
-  databaseData.map(function (country) {
-    var userCountry = userCountryData.find(function (el) {
-      console.log(el.CountryId, country.id);
-      return el.CountryId === country.id;
-    });
-    country.geometry.score = userCountry.score;
-    geoJSON.features.push(country.geometry);
-    return country.geometry;
-  });
-  return geoJSON;
-};
-
-module.exports = generateGeoJSON(databaseData, userCountryData);
-
-var geoJson = { "type": "FeatureCollection", "features": [{ "type": "Feature", "id": "AFG", "properties": { "name": "Afghanistan" }, "geometry": { "type": "Polygon", "coordinates": [[[61.210817, 35.650072], [62.230651, 35.270664], [62.984662, 35.404041], [63.193538, 35.857166], [63.982896, 36.007957], [64.546479, 36.312073], [64.746105, 37.111818], [65.588948, 37.305217], [65.745631, 37.661164], [66.217385, 37.39379], [66.518607, 37.362784], [67.075782, 37.356144], [67.83, 37.144994], [68.135562, 37.023115], [68.859446, 37.344336], [69.196273, 37.151144], [69.518785, 37.608997], [70.116578, 37.588223], [70.270574, 37.735165], [70.376304, 38.138396], [70.806821, 38.486282], [71.348131, 38.258905], [71.239404, 37.953265], [71.541918, 37.905774], [71.448693, 37.065645], [71.844638, 36.738171], [72.193041, 36.948288], [72.63689, 37.047558], [73.260056, 37.495257], [73.948696, 37.421566], [74.980002, 37.41999], [75.158028, 37.133031], [74.575893, 37.020841], [74.067552, 36.836176], [72.920025, 36.720007], [71.846292, 36.509942], [71.262348, 36.074388], [71.498768, 35.650563], [71.613076, 35.153203], [71.115019, 34.733126], [71.156773, 34.348911], [70.881803, 33.988856], [69.930543, 34.02012], [70.323594, 33.358533], [69.687147, 33.105499], [69.262522, 32.501944], [69.317764, 31.901412], [68.926677, 31.620189], [68.556932, 31.71331], [67.792689, 31.58293], [67.683394, 31.303154], [66.938891, 31.304911], [66.381458, 30.738899], [66.346473, 29.887943], [65.046862, 29.472181], [64.350419, 29.560031], [64.148002, 29.340819], [63.550261, 29.468331], [62.549857, 29.318572], [60.874248, 29.829239], [61.781222, 30.73585], [61.699314, 31.379506], [60.941945, 31.548075], [60.863655, 32.18292], [60.536078, 32.981269], [60.9637, 33.528832], [60.52843, 33.676446], [60.803193, 34.404102], [61.210817, 35.650072]]] }, "score": 10 }, { "type": "Feature", "id": "ZMB", "properties": { "name": "Zambia" }, "geometry": { "type": "Polygon", "coordinates": [[[32.759375, -9.230599], [33.231388, -9.676722], [33.485688, -10.525559], [33.31531, -10.79655], [33.114289, -11.607198], [33.306422, -12.435778], [32.991764, -12.783871], [32.688165, -13.712858], [33.214025, -13.97186], [30.179481, -14.796099], [30.274256, -15.507787], [29.516834, -15.644678], [28.947463, -16.043051], [28.825869, -16.389749], [28.467906, -16.4684], [27.598243, -17.290831], [27.044427, -17.938026], [26.706773, -17.961229], [26.381935, -17.846042], [25.264226, -17.73654], [25.084443, -17.661816], [25.07695, -17.578823], [24.682349, -17.353411], [24.033862, -17.295843], [23.215048, -17.523116], [22.562478, -16.898451], [21.887843, -16.08031], [21.933886, -12.898437], [24.016137, -12.911046], [23.930922, -12.565848], [24.079905, -12.191297], [23.904154, -11.722282], [24.017894, -11.237298], [23.912215, -10.926826], [24.257155, -10.951993], [24.314516, -11.262826], [24.78317, -11.238694], [25.418118, -11.330936], [25.75231, -11.784965], [26.553088, -11.92444], [27.16442, -11.608748], [27.388799, -12.132747], [28.155109, -12.272481], [28.523562, -12.698604], [28.934286, -13.248958], [29.699614, -13.257227], [29.616001, -12.178895], [29.341548, -12.360744], [28.642417, -11.971569], [28.372253, -11.793647], [28.49607, -10.789884], [28.673682, -9.605925], [28.449871, -9.164918], [28.734867, -8.526559], [29.002912, -8.407032], [30.346086, -8.238257], [30.740015, -8.340007], [31.157751, -8.594579], [31.556348, -8.762049], [32.191865, -8.930359], [32.759375, -9.230599]]] }, "score": 5 }] };
 
 /***/ })
 /******/ ]);

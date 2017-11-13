@@ -86,7 +86,6 @@ class App extends Component {
       }).then(response => {
         return response.json();
       }).then(responseData => {
-        console.log('DATA', responseData);
         const updateUser = app.state.user;
         updateUser.score = responseData.userScore;
         updateUser.countries = responseData.userCountryData;
@@ -139,7 +138,6 @@ class App extends Component {
       app.setState({
         user: userObj
       })
-      console.log('JSON', userObj);
     })
     .catch(error => {
       console.log(error);
@@ -155,7 +153,6 @@ class App extends Component {
       body: JSON.stringify(newUser)
     })
     .then(function(response) {
-      console.log(response);
     });
   }
 

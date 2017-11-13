@@ -10,8 +10,15 @@ const Nav = (props) => {
   } else {
     return (
       <div className='navbar'>
-        <p>Log in</p>
-        <p>Sign up</p>
+      <div className='navbar-inner container'>
+      <ul>
+        <li className='logo'>Worldly</li>
+      </ul>
+      <ul>
+        <li>Log in</li>
+        <li>Sign up</li>
+      </ul>
+      </div>
       </div>
     )
   }
