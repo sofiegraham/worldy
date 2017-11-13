@@ -18,6 +18,8 @@ var Country = db.define('Country', {
   population: Sequelize.INTEGER,
   language: Sequelize.STRING,
   flag: Sequelize.STRING,
+  code: Sequelize.STRING,
+  geometry: Sequelize.TEXT
 });
 
 var UserCountry = db.define('UserCountry', {

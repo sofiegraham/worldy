@@ -13,17 +13,12 @@ class App extends Component {
     this.state = {
       isLoggedIn: false,
       user: {
-        id: 0,
+        id: 1,
         name: '',
         email: '',
         score: 0,
         countries: []
       },
-      currentUser: {
-        name: 'sofie',
-        id: 1
-      },
-      currentScore: 0,
       gameData: {},
       gameIsPlaying: false
     }
@@ -31,22 +26,30 @@ class App extends Component {
     // const email = prompt("Please enter your email");
     // const password = prompt("Please enter your password");
     const newUser = {
-      name: 'cakes',
+      name: 'sofie',
       email: 'sofie@sofie.com',
       password: 'password',
     }
 
     //const username = prompt("What is your username?");
-    
-    this.getUser('cakes');
     this.setUser(newUser);
-    this.fetchGameData();
+    
+    
+  }
+
+  componentDidMount() {
+    return new Promise((resolve, reject) => {
+      resolve(this.getUser('sofie'));
+    })
+    .then(() => {
+      this.fetchGameData();
+    })
   }
 
   gameGuess = (country) => {
     const app = this;
     const newData = {
-      userId: this.state.currentUser.id,
+      userId: this.state.user.id,
       countryId: country.id,
       columnName: 'flag',
       newValue: true
@@ -62,8 +65,10 @@ class App extends Component {
         return response.json();
       }).then(function(score) {
         console.log('DATA', score);
+        const updateUser = app.state.user;
+        updateUser.score = score
         app.setState({
-          currentScore: score
+          user: updateUser
         })
       });
     }
@@ -75,7 +80,7 @@ class App extends Component {
 
   fetchGameData = () => {
     const app = this;
-    fetch(`/game/flag?userid=${this.state.currentUser.id}`, {
+    fetch(`/game/flag?userid=${this.state.user.id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'

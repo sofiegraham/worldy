@@ -99,6 +99,7 @@ const getUserCountryData = (req, res, next) => {
 }
 
 const getCountries = (req, res, next) => {
+  console.log('GHSJHAJKSKSLASDJA', req.query.userid);
   db.UserCountry.findAll({
     where: { UserId: req.query.userid, flag: false },
     order: [ Sequelize.fn( 'RAND' )],
